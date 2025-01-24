@@ -1,0 +1,31 @@
+class Solution {
+public:
+    vector<int> minOperations(string boxes) {
+        int n = boxes.size();
+        vector<int> left(n, 0);
+        vector<int> right(n, 0);
+        left[0] = boxes[0] == '1' ? 1 : 0;
+        right[n-1] = boxes[n-1] == '1' ? 1 : 0;
+        for(int i = 1; i < n; i++){
+            left[i] = left[i-1] + (boxes[i] == '1' ? 1 : 0);
+        }
+        for(int i = n-2; i >= 0; i--){
+            right[i] = right[i+1] + (boxes[i] == '1' ? 1 : 0);
+        }
+        vector<int> leftPrefix(n, 0);
+        vector<int> rightPrefix(n, 0);
+        leftPrefix[0] = left[0];
+        rightPrefix[n-1] = right[n-1];
+        for(int i = 1; i < n; i++){
+            leftPrefix[i] = leftPrefix[i-1] + left[i];
+        } 
+        for(int i = n-2; i >= 0; i--){
+            rightPrefix[i] = rightPrefix[i+1] + right[i];
+        }
+        vector<int> answer(n, 0);
+        for(int i = 0; i < n; i++){
+            answer[i] = leftPrefix[i] + rightPrefix[i] - left[i] - right[i];
+        }
+        return answer;
+    }
+};
