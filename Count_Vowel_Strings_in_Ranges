@@ -1,0 +1,34 @@
+class Solution {
+public:
+    bool isVowel(char c) {
+        return c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u';
+    }
+
+    vector<int> vowelStrings(vector<string>& words,
+                             vector<vector<int>>& queries) {
+        int n = words.size();
+        vector<int> prefix(n, 0);
+        if (isVowel(words[0][0]) && isVowel(words[0][words[0].size() - 1])) {
+            prefix[0] = 1;
+        }
+        for (int i = 1; i < n; i++) {
+            if (isVowel(words[i][0]) &&
+                isVowel(words[i][words[i].size() - 1])) {
+                prefix[i] = prefix[i-1] + 1;
+            }else{
+                prefix[i] = prefix[i-1];
+            }
+        }
+        vector<int> ans;
+        for(auto &v : queries){
+            int start = v[0];
+            int end = v[1];
+            if(start == 0){
+                ans.push_back(prefix[end]);
+            }else if(start > 0){
+                ans.push_back(prefix[end] - prefix[start - 1]);
+            }
+        }
+        return ans;
+    }
+};
